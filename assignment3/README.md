@@ -1,0 +1,29 @@
+# instapy
+
+This python module lets you apply grayscale or sepia filters to a picture. You can then either view these changes directly or save it locally as a file
+
+Additionally, there are four seperate methods to do this, a pure python implementation, a numpy implementation, a numba implementation and a cython implementation
+
+To install the module, simply extract the contents of "assignment 3" as-is, then make that your working directory, before inputting
+
+```
+python -m pip install . --user
+```
+
+Generally, the module can be run from the command line as:
+
+```
+python -m instapy [file] [-o OUTPUTNAME] [-i IMPLEMENTATIONNAME] [-f FILTERNAME] [-sc SCALE] [-r BOOL]
+```
+
+Further help and/or explanation can be found by
+
+```
+python -m instapy -h
+```
+
+Here is an example run:
+
+```
+...\assignment3>python -m instapy test/rain.jpg -o Output -i numpy -f color2sepia -sc 2 -r False
+```

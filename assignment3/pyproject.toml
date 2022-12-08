@@ -1,0 +1,26 @@
+[build-system]
+requires = [
+    "setuptools",
+    "Cython",
+    "numpy",
+    "numba",
+    "Pillow",
+    "line-profiler"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+version = "0.1.0"
+requires-python = ">=3.7"
+license = {text = "MIT License"}
+name = "instapy"
+description = "A package used for assignment 3 in IN4110"
+readme = "README.md"
+dependencies = [
+    "requests", "numpy", "numba", "pillow", "line-profiler",
+    'importlib-metadata; python_version<"3.8"',
+]
+
+
+[project.scripts]
+instapy = "instapy.cli.py:main"

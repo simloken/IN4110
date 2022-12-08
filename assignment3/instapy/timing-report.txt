@@ -1,0 +1,9 @@
+Filename: rain.jpg ------- Dimensions: 600 x 400 
+Reference (pure Python) filter time color2gray: reference_time3.028s (calls=3)
+Timing: numpy color2gray: 0.007895.3s speedup=383.56x)
+Timing: numba color2gray: 0.008041.3s speedup=376.56x)
+Timing: cython color2gray: 0.007786.3s speedup=388.92x)
+Reference (pure Python) filter time color2sepia: reference_time3.125s (calls=3)
+Timing: numpy color2sepia: 1.556353.3s speedup=2.01x)
+Timing: numba color2sepia: 1.564678.3s speedup=2.00x)
+Timing: cython color2sepia: 1.529035.3s speedup=2.04x)

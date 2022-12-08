@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Strømpris</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      .error {
+        color: red;
+      }
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+
+      .topnav a:hover {
+        background-color: #69dadb;
+        color: black;
+      }
+
+      .topnav a.active {
+        background-color: #193498;
+        color: white;
+      }
+      
+      
+      
+    </style>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega@5"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega-lite@5.6.0"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega-embed@6"
+    ></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById("end").valueAsDate = new Date();
+    });
+</script>
+  </head>
+  <body>
+    <div class="topnav">
+      <a href="/">Strømpris</a>
+      <a class="active" href="/activity.html">Activity</a>
+     <a href="/stromdocs" target="_blank">Strømpris API</a>
+        <a href="/docs" target="_blank">FastAPI Docs</a>
+    </div>
+    
+    <center><h1>Strømpris</h1><br><h2>Activity</h2><div id="vis"></div>
+    <!-- Create Form -->
+
+    <script type="text/javascript">
+      async function refreshPlot() {
+        // begin constructing URL to request the plot JSON
+        const plotUrl = new URL(
+          `${document.location.protocol}//${document.location.host}/plot_activity_prices.json`
+        );
+
+        // get inputs from the form
+
+        // get selected location checkboxes
+
+        var actInput = document.getElementById("activities");
+        if (actInput) {
+          plotUrl.searchParams.append("activities", actInput.value);
+        } else {
+          console.warn('No input with id="activities"');
+        }
+
+        var minInput = document.getElementById("minutes");
+        if (minInput) {
+          plotUrl.searchParams.append("minutes", minInput.value);
+        } else {
+          console.warn('No input with id="minutes"');
+        }
+        
+        var locInput = document.getElementById("location");
+        if (locInput) {
+          plotUrl.searchParams.append("location", locInput.value);
+        } else {
+          console.warn('No input with id="location"');
+        }
+
+        console.log(`requesting new chart from ${plotUrl.href}`);
+        var response = await fetch(plotUrl.href);
+        var spec = await response.json();
+
+        var embedOpt = { mode: "vega-lite" };
+
+        function showError(el, error) {
+          el.innerHTML =
+            '<div class="error" style="color:red;">' +
+            "<p>JavaScript Error: " +
+            error.message +
+            "</p>" +
+            "<p>This usually means there's a typo in your chart specification. " +
+            "See the javascript console for the full traceback.</p>" +
+            "</div>";
+          throw error;
+        }
+        const el = document.getElementById("vis");
+        vegaEmbed("#vis", spec, embedOpt).catch((error) =>
+          showError(el, error)
+        );
+      }
+      refreshPlot();
+    </script><p>Dataset retrieved from the <a href='https://www.hvakosterstrommen.no'>www.hvakosterstrommen.no</a> API</p>
+    <div> <table> <tr>
+    <td><label>Minutes</label><br><input type="number" id="minutes" name="minutes" value="10" min="1" max="60" /> </td>
+    <td> <form>
+    <label>Activity</label><br>
+    <select name="activity" id="activities">
+      {% for acts in activity %}
+      <option value="{{ acts }}">{{ acts }}</option>
+      {% endfor %}
+      </select>
+    </form></td>
+    <td><form>
+    <label>Location</label><br>
+    <select name="location" id="location">
+      {% for locs in locations %}
+      <option value="{{ locs }}">{{ locs }}</option>
+      {% endfor %}
+      </select>
+    </form></td>
+        </tr></table></div><br>
+    <button type="Submit" onclick="refreshPlot();">Refresh</button></center>
+  </body>
+</html>

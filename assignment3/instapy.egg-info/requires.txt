@@ -1,0 +1,8 @@
+requests
+numpy
+numba
+pillow
+line-profiler
+
+[:python_version < "3.8"]
+importlib-metadata

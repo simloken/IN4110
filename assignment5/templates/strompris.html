@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Strømpris</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      .error {
+        color: red;
+      }
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+
+      .topnav a:hover {
+        background-color: #69dadb;
+        color: black;
+      }
+
+      .topnav a.active {
+        background-color: #193498;
+        color: white;
+      }
+      
+      
+      
+    </style>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega@5"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega-lite@5.6.0"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega-embed@6"
+    ></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById("end").valueAsDate = new Date();
+    });
+</script>
+  </head>
+  <body onload="refreshPlot()";>
+    <div class="topnav">
+      <a class="active" href="/">Strømpris</a>
+      <a href="activity.html">Activity</a>
+      <a href="/help/index.html" target="_blank">Strømpris API</a>
+        <a href="/docs" target="_blank">FastAPI Docs</a>
+        
+    </div>
+    
+    <center><h1>Strømpris</h1><br><h2>Strømpris</h2><div id="vis"></div>
+
+    <script type="text/javascript">
+      async function refreshPlot() {
+        // begin constructing URL to request the plot JSON
+        const plotUrl = new URL(
+          `${document.location.protocol}//${document.location.host}/plot_prices.json`
+        );
+
+        // get inputs from the form
+
+        // get selected location checkboxes
+        for (checkbox of document
+          .getElementById("price")
+          .querySelectorAll("input[id=locations]")) {
+          if (checkbox.checked) {
+            plotUrl.searchParams.append("locations", checkbox.value);
+          }
+        }
+        var endInput = document.getElementById("end");
+        if (endInput) {
+          plotUrl.searchParams.append("end", endInput.value);
+        } else {
+          console.warn('No input with id="end"');
+        }
+
+        var daysInput = document.getElementById("days");
+        if (daysInput) {
+          plotUrl.searchParams.append("days", daysInput.value);
+        } else {
+          console.warn('No input with id="days"');
+        }
+
+        console.log(`requesting new chart from ${plotUrl.href}`);
+        var response = await fetch(plotUrl.href);
+        var spec = await response.json();
+
+        var embedOpt = { mode: "vega-lite" };
+
+        function showError(el, error) {
+          el.innerHTML =
+            '<div class="error" style="color:red;">' +
+            "<p>JavaScript Error: " +
+            error.message +
+            "</p>" +
+            "<p>This usually means there's a typo in your chart specification. " +
+            "See the javascript console for the full traceback.</p>" +
+            "</div>";
+          throw error;
+        }
+        const el = document.getElementById("vis");
+        vegaEmbed("#vis", spec, embedOpt).catch((error) =>
+          showError(el, error)
+        );
+      }
+      refreshPlot();
+    </script><p>Dataset retrieved from the <a href='https://www.hvakosterstrommen.no'>www.hvakosterstrommen.no</a> API</p>
+    <div> <table> <tr>
+    <td><label>Date</label><br><input type="date" id="end" name="end"/></td>
+    <td><label>Days</label><br><input type="number" id="days" name="days" value="7" min="1" max="99" /> </td>
+    <td> <label>Location</label><br><form id="price">
+      {% for locs in locations %}
+      <input type="checkbox" id="locations" name="{{ locs }}" value="{{ locs }}"/>
+      <label for="{{ locs }}">{{ locs }}</label>
+      <br>
+      {% endfor %}
+    </form></td></tr></table></div><br>
+    <button type="Submit" onclick="refreshPlot();">Refresh</button></center>
+  </body>
+</html>

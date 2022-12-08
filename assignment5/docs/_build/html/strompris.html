@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Strompris API &#8212; strompris  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to strompris’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-strompris">
+<span id="strompris-api"></span><h1>Strompris API<a class="headerlink" href="#module-strompris" title="Permalink to this headline">¶</a></h1>
+<p>Fetch data from <a class="reference external" href="https://www.hvakosterstrommen.no/strompris-api">https://www.hvakosterstrommen.no/strompris-api</a>
+and visualize it.</p>
+<p>Assignment 5</p>
+<dl class="function">
+<dt id="strompris.fetch_day_prices">
+<code class="sig-prename descclassname">strompris.</code><code class="sig-name descname">fetch_day_prices</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.date = None</em>, <em class="sig-param">location: str = 'NO1'</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#strompris.fetch_day_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve one day worth of data.</p>
+<dl class="simple">
+<dt>parameters:</dt><dd><p>data (datetime.date object or None): The day to retrieve data from, if None defaults to today.
+location (str): The area to retrieve data from.</p>
+</dd>
+<dt>returns:</dt><dd><p>lst (list): A list containing all price data from given day and area.</p>
+</dd>
+</dl>
+<p>…</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="strompris.fetch_prices">
+<code class="sig-prename descclassname">strompris.</code><code class="sig-name descname">fetch_prices</code><span class="sig-paren">(</span><em class="sig-param">end_date: datetime.date = None</em>, <em class="sig-param">days: int = 7</em>, <em class="sig-param">locations=('NO1'</em>, <em class="sig-param">'NO2'</em>, <em class="sig-param">'NO3'</em>, <em class="sig-param">'NO4'</em>, <em class="sig-param">'NO5')</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#strompris.fetch_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve data over a time period in multiple areas and consolidate to one DataFrame.</p>
+<dl class="simple">
+<dt>parameters:</dt><dd><p>end_date (datetime.date object or None): The date to stop at when retrieving data.
+days (int): The number of days to retrieve data from.
+locations (tuple or array-like): The locations to retrieve data from.</p>
+</dd>
+<dt>returns:</dt><dd><p>df (pandas.DataFrame): A consolidated DataFrame with all retrieved data.</p>
+</dd>
+</dl>
+<p>…</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="strompris.plot_prices">
+<code class="sig-prename descclassname">strompris.</code><code class="sig-name descname">plot_prices</code><span class="sig-paren">(</span><em class="sig-param">df: pandas.core.frame.DataFrame</em>, <em class="sig-param">locations=None</em><span class="sig-paren">)</span> &#x2192; altair.vegalite.v4.api.Chart<a class="headerlink" href="#strompris.plot_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot energy prices over time.</p>
+<dl class="simple">
+<dt>parameters:</dt><dd><p>df (pandas.DataFrame): A dataframe containing all data to plot.
+locations (array-like or None): which locations to plot.</p>
+</dd>
+<dt>returns:</dt><dd><p>alt.Chart (altair.Chart): A chart containing all the data from df and an average over a timespan of one day.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strompris.plot_daily_prices">
+<code class="sig-prename descclassname">strompris.</code><code class="sig-name descname">plot_daily_prices</code><span class="sig-paren">(</span><em class="sig-param">df: pandas.core.frame.DataFrame</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#strompris.plot_daily_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a dataframe to use when plotting the average over a one day period.</p>
+<dl class="simple">
+<dt>parameters:</dt><dd><p>df (pandas.DataFrame): A dataframe containing all data to plot.</p>
+</dd>
+<dt>returns:</dt><dd><p>df (pandas.DataFrame): A new dataframe which holds the mean value of each given day.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strompris.plot_activity_prices">
+<code class="sig-prename descclassname">strompris.</code><code class="sig-name descname">plot_activity_prices</code><span class="sig-paren">(</span><em class="sig-param">activity: str = 'shower'</em>, <em class="sig-param">minutes: int = 10</em>, <em class="sig-param">location='NO1'</em><span class="sig-paren">)</span> &#x2192; altair.vegalite.v4.api.Chart<a class="headerlink" href="#strompris.plot_activity_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a chart which shows prices at during the day for a given activity, location and time.</p>
+<dl class="simple">
+<dt>parameters:</dt><dd><p>activity (str): Activity to pricecheck.
+minutes (int): Number of minutes activity happens.
+location (str): Location to fetch prices from.</p>
+</dd>
+<dt>returns:</dt><dd><p>alt.Chart (altair.Chart): A chart containing one days worth of data for activity, location and time</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">strompris</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Strompris API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to strompris’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Simenlok.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/strompris.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
